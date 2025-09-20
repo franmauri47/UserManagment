@@ -1,0 +1,9 @@
+﻿using Domain.Common;
+
+namespace Domain.Entities;
+
+public class User : AuditableEntity
+{
+    public required string Name { get; set; }
+    public required string Email { get; set; }
+}
