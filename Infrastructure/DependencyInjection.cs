@@ -1,4 +1,6 @@
 ﻿using Infrastructure.Data;
+using Infrastructure.Repositories;
+using Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,10 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("MySql");
 
+        //Services
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        //Db Context
         services.AddDbContext<MySqlDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
         return services;
     }

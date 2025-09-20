@@ -1,8 +1,7 @@
 ﻿namespace Domain.Common;
 
-public class AuditableEntity
+public class AuditableEntity : BaseEntity
 {
-    public int Id { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
 }
