@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Data.ContextExtensions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -17,5 +18,6 @@ public class MySqlDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.AddInitialSeed();
     }
 }

@@ -11,5 +11,5 @@ public class Domicile : AuditableEntity
     public required string City { get; set; }
 
     // Navegability properties
-    public required User User { get; set; }
+    public User? User { get; set; } = null!;
 }

@@ -18,8 +18,7 @@ internal class DomicileConfiguration : IEntityTypeConfiguration<Domicile>
             .IsRequired();
 
         builder.Property(e => e.DirectionNumber)
-            .HasMaxLength(10)
-            .HasDefaultValue("No direction number.");
+            .HasMaxLength(10);
 
         builder.Property(e => e.City)
             .HasMaxLength(100)

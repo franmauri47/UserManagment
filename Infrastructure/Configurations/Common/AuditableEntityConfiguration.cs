@@ -11,7 +11,6 @@ internal static class AuditableEntityConfiguration
         builder.Property(e => e.CreationDate)
             .IsRequired();
 
-        builder.Property(e => e.ModifiedDate)
-            .IsRequired();
+        builder.Property(e => e.ModifiedDate);
     }
 }

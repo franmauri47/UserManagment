@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20250920151523_InitialMigration")]
+    [Migration("20250920152405_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -42,10 +42,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("DirectionNumber")
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
-                        .HasDefaultValue("No direction number.");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime(6)");
