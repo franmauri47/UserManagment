@@ -1,4 +1,7 @@
 using Infrastructure;
+using Application;
+using Api.UserManagment;
+using Api.UserManagment.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddApiServices();
 
 var app = builder.Build();
 
