@@ -8,7 +8,7 @@ namespace Application.Users.Commands;
 
 public record DeleteUserCommand(int Id) : IRequest<ResponseDto>;
 
-public class DeleteUserCommandHandler(IUsersService usersService, ILogger logger) : IRequestHandler<DeleteUserCommand, ResponseDto>
+public class DeleteUserCommandHandler(IUsersService usersService, ILogger<DeleteUserCommandHandler> logger) : IRequestHandler<DeleteUserCommand, ResponseDto>
 {
     public async Task<ResponseDto> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
