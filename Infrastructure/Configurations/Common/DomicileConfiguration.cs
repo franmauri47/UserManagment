@@ -24,6 +24,10 @@ internal class DomicileConfiguration : IEntityTypeConfiguration<Domicile>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder.Property(e => e.Province)
+            .HasMaxLength(100)
+            .IsRequired();
+
         builder.AddAuditableEntityConfiguration<Domicile>();
 
         builder.HasOne(d => d.User)

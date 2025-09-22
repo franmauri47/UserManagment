@@ -2,6 +2,7 @@
 using Infrastructure.Data;
 using Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
 
@@ -14,7 +15,7 @@ internal class GenericRepository<T>(MySqlDbContext context) : IGenericRepository
         return entity;
     }
 
-    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public virtual async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         var entity = await GetByIdAsync(id, cancellationToken);
         if (entity == null) return;
@@ -22,22 +23,22 @@ internal class GenericRepository<T>(MySqlDbContext context) : IGenericRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await context.Set<T>().ToListAsync(cancellationToken);
     }
 
-    public Task<IReadOnlyList<T>> GetByFilterAsync(Func<T, bool> filter, CancellationToken cancellationToken = default)
+    public async Task<List<T>> GetByFilterAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await context.Set<T>().Where(filter).ToListAsync();
     }
 
-    public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public virtual async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
-    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+    public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         context.Entry(entity).State = EntityState.Modified;
         await context.SaveChangesAsync(cancellationToken);

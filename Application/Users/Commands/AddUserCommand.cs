@@ -1,5 +1,5 @@
 ﻿using Application.Common.Dtos;
-using Application.Users.Dtos;
+using Application.Dtos;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Repositories.Interfaces;
@@ -8,38 +8,42 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Users.Commands;
 
-public record AddUserCommand(CreateUserDto data) : IRequest<ResponseDto<UserDto>>;
+public record AddUserCommand(AddUserDto data) : IRequest<ResponseDto>;
 
 public class AddUserCommandHandler(
     IGenericRepository<User> userRepository,
+    IGenericRepository<Domicile> domicileRepository,
     IMapper mapper,
-    ILogger<AddUserCommandHandler> logger) : IRequestHandler<AddUserCommand, ResponseDto<UserDto>>
+    ILogger<AddUserCommandHandler> logger) : IRequestHandler<AddUserCommand, ResponseDto>
 {
-    public async Task<ResponseDto<UserDto>> Handle(AddUserCommand request, CancellationToken cancellationToken)
+    public async Task<ResponseDto> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = new User
-            {
-                Name = request.data.Name,
-                Email = request.data.Email,
-                CreationDate = DateTime.UtcNow
-            };
-            
-            var result = await userRepository.AddAsync(user, cancellationToken);
+            var user = mapper.Map<User>(request.data);
+            var domicile = mapper.Map<Domicile>(request.data.DomicileData);
 
-            return new ResponseDto<UserDto>
+            var userResult = await userRepository.AddAsync(user, cancellationToken);
+
+            domicile.UserId = userResult.Id;
+            var domicileResult = await domicileRepository.AddAsync(domicile, cancellationToken);
+
+            return new ResponseDto
             {
                 ErrorCode = 0,
                 ErrorDescription = string.Empty,
-                Data = mapper.Map<UserDto>(result)
+                Data = new GetUserDataDto
+                {
+                    User = mapper.Map<UserDto>(userResult),
+                    Domicile = mapper.Map<DomicileDto>(domicileResult)
+                }
             };
         }
         catch (Exception ex)
         {
             string errorMessage = $"An error occurred while adding a new user: {ex.Message}";
             logger.LogError(errorMessage);
-            return new ResponseDto<UserDto>
+            return new ResponseDto<GetUserDataDto>
             {
                 ErrorCode = -1,
                 ErrorDescription = errorMessage,

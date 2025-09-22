@@ -11,8 +11,8 @@ public class MySqlDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users { get; set; }
-    public DbSet<Domicile> Domiciles { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Domicile> Domiciles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

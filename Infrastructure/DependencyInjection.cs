@@ -13,7 +13,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("MySql");
 
-        //Services
+        //Services & repos
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         //Db Context
