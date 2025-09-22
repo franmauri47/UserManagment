@@ -53,18 +53,4 @@ internal class UsersService(MySqlDbContext context, IMapper mapper) : IUsersServ
             return null;
         }
     }
-
-    public async Task<bool> UpdateUserDataAsync(int id, AddDomicileDto? domicileData, CancellationToken cancellationToken = default)
-    {
-        var domcile = await context.Domiciles.FirstOrDefaultAsync(d => d.UserId == id);
-            domcile.Street = domicileData!.Street;
-            domcile.Province = domicileData.Province;
-            domcile.City = domicileData.City;
-            domcile.DirectionNumber = domicileData.DirectionNumber;
-            domcile.ModifiedDate = DateTime.UtcNow;
-
-        context.Domiciles.Update(domcile);
-        await context.SaveChangesAsync(cancellationToken);
-        return true;
-    }
 }
