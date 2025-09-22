@@ -11,10 +11,10 @@ public class AddDomicileDto : IMapTo<Domicile>
     public required string Province { get; set; }
     public required string City { get; set; }
 
-    public virtual void Mapping(Profile profile)
+    public void Mapping(Profile profile)
     {
-        profile.CreateMap<AddUserDto, User>()
+        profile.CreateMap<AddDomicileDto, Domicile>()
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => DateTime.Now))
-            .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore());
+            .ForMember(dest => dest.ModifiedDate, opt => opt.UseDestinationValue());
     }
 }

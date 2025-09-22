@@ -12,19 +12,16 @@ namespace UnitTests.Users.Commands;
 public class UpdateUserDomicileCommandHandlerTests
 {
     private readonly Mock<IGenericRepository<Domicile>> _domicileRepoMock;
-    private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<UpdateUserDomicileCommandHandler>> _loggerMock;
     private readonly UpdateUserDomicileCommandHandler _handler;
 
     public UpdateUserDomicileCommandHandlerTests()
     {
         _domicileRepoMock = new Mock<IGenericRepository<Domicile>>();
-        _mapperMock = new Mock<IMapper>();
         _loggerMock = new Mock<ILogger<UpdateUserDomicileCommandHandler>>();
 
         _handler = new UpdateUserDomicileCommandHandler(
             _domicileRepoMock.Object,
-            _mapperMock.Object,
             _loggerMock.Object
         );
     }
@@ -97,10 +94,6 @@ public class UpdateUserDomicileCommandHandlerTests
             .Setup(r => r.GetByFilterAsync(It.IsAny<Expression<Func<Domicile, bool>>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domicile> { existingDomicile });
 
-        _mapperMock
-            .Setup(m => m.Map<Domicile>(dto))
-            .Returns(mappedDomicile);
-
         _domicileRepoMock
             .Setup(r => r.UpdateAsync(It.IsAny<Domicile>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask)
@@ -140,48 +133,6 @@ public class UpdateUserDomicileCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ReturnsError_WhenMappingFails()
-    {
-        // Arrange
-        var dto = new UpdateDomicileDto
-        {
-            Street = "Main",
-            Province = "A",
-            City = "B"
-        };
-
-        var existingDomicile = new Domicile
-        {
-            Id = 2,
-            UserId = 1,
-            Street = "Old Street",
-            Province = "Old Province",
-            City = "Old City",
-            CreationDate = DateTime.UtcNow.AddDays(-3)
-        };
-
-        _domicileRepoMock
-            .Setup(r => r.GetByFilterAsync(It.IsAny<Expression<Func<Domicile, bool>>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Domicile> { existingDomicile });
-
-        _mapperMock
-            .Setup(m => m.Map<Domicile>(dto))
-            .Throws(new Exception("Mapping error"));
-
-        var command = new UpdateUserDomicileCommand(1, dto);
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        Assert.Equal(-1, result.ErrorCode);
-        Assert.Contains("Mapping error", result.ErrorDescription);
-        Assert.Null(result.Data);
-
-        _domicileRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Domicile>(), It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-    [Fact]
     public async Task Handle_ReturnsError_WhenUpdateAsyncThrows()
     {
         // Arrange
@@ -216,10 +167,6 @@ public class UpdateUserDomicileCommandHandlerTests
         _domicileRepoMock
             .Setup(r => r.GetByFilterAsync(It.IsAny<Expression<Func<Domicile, bool>>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domicile> { existingDomicile });
-
-        _mapperMock
-            .Setup(m => m.Map<Domicile>(dto))
-            .Returns(mappedDomicile);
 
         _domicileRepoMock
             .Setup(r => r.UpdateAsync(It.IsAny<Domicile>(), It.IsAny<CancellationToken>()))

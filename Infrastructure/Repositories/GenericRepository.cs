@@ -40,7 +40,7 @@ internal class GenericRepository<T>(MySqlDbContext context) : IGenericRepository
 
     public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        context.Entry(entity).State = EntityState.Modified;
+        context.Set<T>().Update(entity);
         await context.SaveChangesAsync(cancellationToken);
     }
 }

@@ -4,12 +4,10 @@ using Domain.Entities;
 
 namespace Application.Dtos;
 
-public class UpdateDomicileDto : AddDomicileDto, IMapFrom<Domicile>
+public class UpdateDomicileDto : IMapFrom<Domicile>
 {
-    public override void Mapping(Profile profile)
-    {
-        profile.CreateMap<UpdateDomicileDto, Domicile>()
-            .ForMember(dest => dest.ModifiedDate, opt => opt.MapFrom(src => DateTime.Now))
-            .ForMember(dest => dest.CreationDate, opt => opt.Ignore());
-    }
+    public required string Street { get; set; }
+    public string? DirectionNumber { get; set; }
+    public required string Province { get; set; }
+    public required string City { get; set; }
 }

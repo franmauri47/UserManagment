@@ -9,13 +9,13 @@ namespace UnitTests.Users.Commands;
 public class DeleteUserCommandHandlerTests
 {
     private readonly Mock<IUsersService> _usersServiceMock;
-    private readonly Mock<ILogger<GetUserQueryHandler>> _loggerMock;
+    private readonly Mock<ILogger<DeleteUserCommandHandler>> _loggerMock;
     private readonly DeleteUserCommandHandler _handler;
 
     public DeleteUserCommandHandlerTests()
     {
         _usersServiceMock = new Mock<IUsersService>();
-        _loggerMock = new Mock<ILogger<GetUserQueryHandler>>();
+        _loggerMock = new Mock<ILogger<DeleteUserCommandHandler>>();
         _handler = new DeleteUserCommandHandler(_usersServiceMock.Object, _loggerMock.Object);
     }
 

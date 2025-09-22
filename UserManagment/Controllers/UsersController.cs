@@ -18,7 +18,11 @@ public class UsersController : CommonController
     public async Task<ActionResult<ResponseDto>> GetUsers([FromQuery] string? name, [FromQuery] string? province, [FromQuery] string? city, CancellationToken cancellationToken)
         => await Sender.Send(new GetUserQuery(name, province, city), cancellationToken);
 
-    [HttpDelete("{int:id}")]
-    public async Task<ActionResult<ResponseDto>> DeleteUserById(int id, CancellationToken cancellationToken)
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<ResponseDto>> DeleteUserById([FromRoute]int id, CancellationToken cancellationToken)
         => await Sender.Send(new DeleteUserCommand(id), cancellationToken);
+
+    [HttpPut("{id:int}/Domicile")]
+    public async Task<ActionResult<ResponseDto>> UpdateUserDomicile([FromRoute]int id, [FromBody] UpdateDomicileDto domicileData, CancellationToken cancellationToken)
+        => await Sender.Send(new UpdateUserDomicileCommand(id, domicileData), cancellationToken);
 }

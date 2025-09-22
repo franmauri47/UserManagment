@@ -1,9 +1,7 @@
 ﻿using Application.Common.Dtos;
 using Application.Dtos;
-using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Repositories.Interfaces;
-using Infrastructure.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +11,6 @@ public record UpdateUserDomicileCommand(int UserId, UpdateDomicileDto domicileDa
 
 public class UpdateUserDomicileCommandHandler(
     IGenericRepository<Domicile> domicileRepository,
-    IMapper mapper,
     ILogger<UpdateUserDomicileCommandHandler> logger) : IRequestHandler<UpdateUserDomicileCommand, ResponseDto>
 {
     public async Task<ResponseDto> Handle(UpdateUserDomicileCommand request, CancellationToken cancellationToken)
@@ -23,7 +20,12 @@ public class UpdateUserDomicileCommandHandler(
             var persistedDomicile = (await domicileRepository.GetByFilterAsync(x => x.UserId == request.UserId, cancellationToken)).FirstOrDefault()
                 ?? throw new Exception($"Domicile not found for the user Id {request.UserId}.");
 
-            persistedDomicile = mapper.Map<Domicile>(request.domicileData);
+            persistedDomicile.Street = request.domicileData.Street;
+            persistedDomicile.DirectionNumber = request.domicileData.DirectionNumber;
+            persistedDomicile.Province = request.domicileData.Province;
+            persistedDomicile.City = request.domicileData.City;
+            persistedDomicile.ModifiedDate = DateTime.Now;
+
             await domicileRepository.UpdateAsync(persistedDomicile, cancellationToken);
 
             return new ResponseDto

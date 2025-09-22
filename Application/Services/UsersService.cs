@@ -13,15 +13,15 @@ internal class UsersService(MySqlDbContext context, IMapper mapper) : IUsersServ
         var usersQuery = context.Users.AsQueryable();
 
         if (!string.IsNullOrEmpty(name))
-            usersQuery = usersQuery.Where(x => x.Name == name);
+            usersQuery = usersQuery.Where(x => x.Name.Contains(name));
 
         if (!string.IsNullOrEmpty(province) || !string.IsNullOrEmpty(city))
         {
             usersQuery = usersQuery.Where(u =>
                 context.Domiciles.Any(d =>
                     d.UserId == u.Id &&
-                    (string.IsNullOrEmpty(province) || d.Province == province) &&
-                    (string.IsNullOrEmpty(city) || d.City == city)
+                    (string.IsNullOrEmpty(province) || d.Province.Contains(province)) &&
+                    (string.IsNullOrEmpty(city) || d.City.Contains(city))
                 )
             );
         }

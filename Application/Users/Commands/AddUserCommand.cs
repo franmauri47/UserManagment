@@ -25,8 +25,12 @@ public class AddUserCommandHandler(
 
             var userResult = await userRepository.AddAsync(user, cancellationToken);
 
-            domicile.UserId = userResult.Id;
-            var domicileResult = await domicileRepository.AddAsync(domicile, cancellationToken);
+            Domicile? domicileResult = null;
+            if (domicile != null)
+            {
+                domicile.UserId = userResult.Id;
+                domicileResult = await domicileRepository.AddAsync(domicile, cancellationToken);
+            }
 
             return new ResponseDto
             {
@@ -35,7 +39,7 @@ public class AddUserCommandHandler(
                 Data = new GetUserDataDto
                 {
                     User = mapper.Map<UserDto>(userResult),
-                    Domicile = mapper.Map<DomicileDto>(domicileResult)
+                    Domicile = domicileResult != null ? mapper.Map<DomicileDto>(domicileResult) : null
                 }
             };
         }
