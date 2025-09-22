@@ -66,32 +66,31 @@ MediaTr
 
 XUnit (para tests unitarios)
 
-🚀 Instalación y uso
-Clona el repositorio:
+## 🚀 Instalación y uso ##
 
-Bash
+### Clona el repositorio: ### 
 
 git clone https://github.com/tu-usuario/UserManagment.git
+
 Abre el proyecto en Visual Studio o Visual Studio Code:
 
 Navega a la carpeta del proyecto.
 
 Abre la solución (.sln).
 
-Configura la cadena de conexión a la base de datos:
+### Configurar la cadena de conexión a la base de datos: ###
 
 Modifica el archivo appsettings.json o appsettings.Development.json con tu cadena de conexión.
 
 Ejecuta las migraciones (si usas Entity Framework Core):
 
-Bash
-
 dotnet ef database update
-Ejecuta la aplicación:
+
+### Ejecuta la aplicación: ###
 
 Presiona F5 en Visual Studio o usa el siguiente comando en la terminal:
 
-Bash
 
 dotnet run
+
 La API estará disponible en el puerto especificado en la configuración (el mismo aparece en la consola de salida).
