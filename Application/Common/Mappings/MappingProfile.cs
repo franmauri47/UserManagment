@@ -13,10 +13,12 @@ public class MappingProfile : Profile
     private void ApplyMappingsFromAssembly(Assembly assembly)
     {
         var mapFromType = typeof(IMapFrom<>);
+        var mapToType = typeof(IMapTo<>);
 
         var mappingMethodName = nameof(IMapFrom<object>.Mapping);
 
-        bool HasInterface(Type t) => t.IsGenericType && (t.GetGenericTypeDefinition() == mapFromType);
+        bool HasInterface(Type t) => t.IsGenericType && (t.GetGenericTypeDefinition() == mapFromType
+            || t.GetGenericTypeDefinition() == mapToType);
 
         var types = assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(HasInterface)).ToList();
 
